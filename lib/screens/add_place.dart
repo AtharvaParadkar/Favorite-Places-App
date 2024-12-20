@@ -8,16 +8,16 @@ class AddPlaceScreen extends StatefulWidget {
 }
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
+  final TextEditingController titleController = TextEditingController();
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController titleController = TextEditingController();
-
-    // ignore: unused_element
-    void dispose() {
-      titleController.dispose();
-      super.dispose();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -42,7 +42,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   ),
                 ),
                 ElevatedButton.icon(
-                  onPressed: (){},
+                  onPressed: () {},
                   icon: const Icon(Icons.add),
                   label: const Text('Add Place'),
                 ),
