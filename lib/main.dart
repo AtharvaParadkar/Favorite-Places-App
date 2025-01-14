@@ -13,7 +13,7 @@ void main() {
 
 final colorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 102, 6, 247),
-  surface: const Color.fromARGB(255, 110, 0, 255),
+  surface:  const Color.fromARGB(255, 56, 49, 66),
 );
 
 final theme = ThemeData().copyWith(
