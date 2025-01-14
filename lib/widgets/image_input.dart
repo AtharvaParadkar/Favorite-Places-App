@@ -8,17 +8,72 @@ class ImageInput extends StatefulWidget {
 
   final void Function(File image) onPickImage;
 
-
   @override
   State<ImageInput> createState() => _ImageInputState();
 }
 
 class _ImageInputState extends State<ImageInput> {
   File? _selectedImage;
-  void _takePicture() async {
+
+  void _takePicture() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(backgroundColor: Theme.of(context).primaryColorLight,
+        title: const Text('Choose Image Source'),
+        actions: [
+          Container(
+            height: 80,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: Theme.of(context)
+                    .colorScheme
+                    .inverseSurface
+                    .withAlpha(128),
+              ),
+            ),
+            child: TextButton.icon(
+              onPressed: () {
+                _pickImage(ImageSource.camera);
+                Navigator.pop(context);
+              },
+              label:
+                  const Text('Camera', style: TextStyle(color: Colors.black)),
+              icon: const Icon(Icons.camera_alt, color: Colors.black),
+            ),
+          ),
+          Container(
+            height: 80,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: Theme.of(context)
+                    .colorScheme
+                    .inverseSurface
+                    .withAlpha(128),
+              ),
+            ),
+            child: TextButton.icon(
+              onPressed: () {
+                _pickImage(ImageSource.gallery);
+                Navigator.pop(context);
+              },
+              label:
+                  const Text('Gallery', style: TextStyle(color: Colors.black)),
+              icon: const Icon(Icons.filter, color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(
-      source: ImageSource.camera,
+      source: source,
       maxWidth: 600,
     );
 
