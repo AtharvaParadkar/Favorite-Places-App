@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class LoactionInput extends StatefulWidget {
   const LoactionInput({super.key});
@@ -8,8 +9,59 @@ class LoactionInput extends StatefulWidget {
 }
 
 class _LoactionInputState extends State<LoactionInput> {
+  Location? _pickedLocation;
+  var _isGettingLocation = false;
+
+  void _getCurrentLocation() async {
+    Location location = Location();
+
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    LocationData locationData;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    setState(() {
+      _isGettingLocation = true;
+    });
+
+    locationData = await location.getLocation();
+
+    setState(() {
+      _isGettingLocation = false;
+    });
+
+    debugPrint('$locationData');
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget previewContent = Text(
+      'No Location Chosen',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
+    );
+
+    if (_isGettingLocation) {
+      previewContent = const CircularProgressIndicator();
+    }
+
     return Column(
       children: [
         Container(
@@ -25,20 +77,14 @@ class _LoactionInputState extends State<LoactionInput> {
                   .withAlpha(128),
             ),
           ),
-          child: Text(
-            'No Loaction Chosen',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-          ),
+          child: previewContent,
         ),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             TextButton.icon(
-              onPressed: () {},
+              onPressed: _getCurrentLocation,
               label: const Text('Get Current Location',
                   style: TextStyle(color: Colors.white)),
               icon: const Icon(Icons.location_on, color: Colors.white),
