@@ -27,11 +27,17 @@ class PlacesList extends StatelessWidget {
                   title: Text(
                     places[index].title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: Theme.of(context).colorScheme.onTertiary
+                        ),
+                  ),
+                  subtitle: Text(
+                    places[index].location.address,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                   ),
                   leading: CircleAvatar(
-                    radius: 22,
+                    radius: 26,
                     backgroundImage: FileImage(places[index].image),
                   ),
                   onTap: () => Navigator.push(
