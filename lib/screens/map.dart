@@ -31,17 +31,19 @@ class _MapScreenState extends State<MapScreen> {
         actions: [
           if (widget.isSelecting)
             IconButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).pop(_pickedLocation),
               icon: const Icon(Icons.save),
             ),
         ],
       ),
       body: GoogleMap(
-        onTap: (position) {
-          setState(() {
-            _pickedLocation = position;
-          });
-        },
+        onTap: !widget.isSelecting
+            ? null
+            : (position) {
+                setState(() {
+                  _pickedLocation = position;
+                });
+              },
         initialCameraPosition: CameraPosition(
           target: LatLng(
             widget.location.latitude,
@@ -56,7 +58,7 @@ class _MapScreenState extends State<MapScreen> {
                   markerId: const MarkerId('M1'),
                   //~ '??' is a null-aware operator
                   position:
-                      _pickedLocation ??   //? Uses _pickedLocation if it is not null otherwise uses LatLng()
+                      _pickedLocation ?? //? Uses _pickedLocation if it is not null otherwise uses LatLng()
                           LatLng(
                             widget.location.latitude,
                             widget.location.longitude,
