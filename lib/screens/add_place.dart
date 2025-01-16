@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:favorite_places_app/model/place.dart';
 import 'package:favorite_places_app/providers/user_places.dart';
 import 'package:favorite_places_app/widgets/image_input.dart';
 import 'package:favorite_places_app/widgets/loaction_input.dart';
@@ -16,16 +17,19 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final TextEditingController titleController = TextEditingController();
   File? _selectedImage;
+  PlaceLocation? _selectedLoaction;
 
   void _savePlace() {
     final enteredTitle = titleController.text;
-    if (enteredTitle.isEmpty) {
+    if (enteredTitle.isEmpty ||
+        _selectedImage == null ||
+        _selectedLoaction == null) {
       return;
     }
 
     ref
         .read(userPlacesProvider.notifier)
-        .addPlace(enteredTitle, _selectedImage!);
+        .addPlace(enteredTitle, _selectedImage!, _selectedLoaction!);
     Navigator.of(context).pop();
   }
 
@@ -66,7 +70,11 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
               },
             ),
             const SizedBox(height: 10),
-            const LoactionInput(),
+            LoactionInput(
+              onSelectLocation: (PlaceLocation location) {
+                _selectedLoaction = location;
+              },
+            ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _savePlace,
