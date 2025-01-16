@@ -16,6 +16,15 @@ class _LoactionInputState extends State<LoactionInput> {
   PlaceLocation? _pickedLocation;
   var _isGettingLocation = false;
 
+  String get locationImage {
+    if (_pickedLocation == null) {
+      return '';
+    }
+    final lat = _pickedLocation!.latitude;
+    final lng = _pickedLocation!.longitude;
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:X%7C$lat,$lng&key=AIzaSyBtQjgwKVugnzjsZ9XXz3oMGcjiGXPoXIw';
+  }
+
   void _getCurrentLocation() async {
     Location location = Location();
 
@@ -85,6 +94,15 @@ class _LoactionInputState extends State<LoactionInput> {
 
     if (_isGettingLocation) {
       previewContent = const CircularProgressIndicator();
+    }
+
+    if (_pickedLocation != null) {
+      previewContent = Image.network(
+        locationImage,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
     }
 
     return Column(
