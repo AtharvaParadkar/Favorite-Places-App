@@ -24,6 +24,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
     if (enteredTitle.isEmpty ||
         _selectedImage == null ||
         _selectedLoaction == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error while adding place!")));
       return;
     }
 
